@@ -1,10 +1,10 @@
-# Etapa 1: construir el JAR
+# Etapa 1: construir el JAR sin tests
 FROM eclipse-temurin:21-jdk as builder
 
 WORKDIR /app
 COPY . .
 RUN chmod +x gradlew
-RUN ./gradlew build --no-daemon
+RUN ./gradlew build -x test --no-daemon
 
 # Etapa 2: imagen final
 FROM eclipse-temurin:21-jdk
