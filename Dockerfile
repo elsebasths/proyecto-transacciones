@@ -1,14 +1,16 @@
-# Imagen base con Java 21
+# Etapa 1: construir el JAR
+FROM eclipse-temurin:21-jdk as builder
+
+WORKDIR /app
+COPY . .
+RUN chmod +x gradlew
+RUN ./gradlew build --no-daemon
+
+# Etapa 2: imagen final
 FROM eclipse-temurin:21-jdk
 
-# Crear directorio de trabajo
 WORKDIR /app
+COPY --from=builder /app/build/libs/*.jar app.jar
 
-# Copiar el archivo JAR al contenedor
-COPY build/libs/transacciones-0.0.1-SNAPSHOT.jar app.jar
-
-# Exponer el puerto que usa Spring Boot
 EXPOSE 8080
-
-# Comando para ejecutar la aplicación
 ENTRYPOINT ["java", "-jar", "app.jar"]
